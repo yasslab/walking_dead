@@ -13,9 +13,13 @@ class WalkingDead
   def each
     cache = response_cache
     each_uri do |uri|
-      res = cache[uri]
-      next if res.code.start_with?('2')
-      yield uri, res
+      begin
+        res = cache[uri]
+        next if res.code.start_with?('2')
+        yield uri, res
+      rescue
+        yield uri, nil
+      end
     end
   end
 
